@@ -12,9 +12,9 @@
  */
 File gcodeFile;
 File root;  // list directories 
-String gclb [10];  // gcode buffer (sores the gcl's.
+String gclb [2];  // gcode buffer (sores the gcl's.
 String gcl = String(20);     //gcl = line with gcode (STring constructor)
-String filelist [8]; //  = String(8);  // tabel with the files on the SD card
+String filelist [12]; //  = String(8);  // tabel with the files on the SD card
 int lptr =0;        // counts gcode lines
 SD_Obj::SD_Obj()
 { ; };
@@ -59,9 +59,8 @@ if (gcodeFile) {
 //put char in gcode buffer 
 while (gcodeFile.available()) {
 gcodechar = gcodeFile.read();
-//gcl += gcodechar;
 if (gcodechar == '\n') {  // check eol
-i++;}  // if eol insert '/0' (c convention)
+i++;}  // if eol >>  add one line
 
 }//eo while
 gcodeFile.close();
@@ -165,21 +164,13 @@ while(morefiles) {
 
      File entry =  dir.openNextFile();
      if (entry) {
-            
-     for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
-     }
-     
-     filelist[i] = entry.name();  // Store file entries in tabel
-     Serial.print(filelist[i]);
-     if (entry.isDirectory()) {
+       if (entry.isDirectory()) {
        Serial.println("/");
        printDirectory(entry, numTabs+1);
      } else {
        // files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
-       //filelist[i] = entry.name();
+       Serial.println(entry.name());
+       filelist[i] = entry.name();  // Store file entries in tabel
        i++;
      } // eo else
    } //eo if entry

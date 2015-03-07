@@ -18,6 +18,7 @@ class Menu3_Obj
 public:
 Menu3_Obj(int A);  //constructor
 int init_LCD(String txt );
+void Welcome(int language, int version );
 void MakeMenu(int num,int language, int button[], int size_of_button);
 int show_select_File(String files [], int num_of_files );   // Show the avalaible files (for cartridges and select one
 void position(String position); // display position information 
@@ -29,9 +30,9 @@ private:
 void paintmenu(int mpx, int mpy, int mw, int mh );
 void paintbutton(String buttonlabel, int x, int y );
 void painttxt(String txt,int x, int y );
-String  textNL[15] ;
-String  textGE[15] ;
-String  textUK[15] ;
+String  textNL[18] ;
+String  textGE[18] ;
+String  textUK[18] ;
 String buttonlabel;
 int menu_pos_x;  
 int menu_w;

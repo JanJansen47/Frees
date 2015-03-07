@@ -55,14 +55,7 @@ String files [8];
 Menu3_Obj::Menu3_Obj(int A)
 {
   int _A = A;
-
 }
-
-/*
-Send system commands to Grbl 
- Results in System command output window
- 
- */
 
 int Menu3_Obj::init_LCD(String txt )
 {   
@@ -93,13 +86,31 @@ int Menu3_Obj::init_LCD(String txt )
 String files [8] = String(8);
   return(10);
 }
+
+
+// Welcome menu
+void Menu3_Obj::Welcome(int language, int version ) {
+tft.fillScreen(RED);
+tft.setCursor(25, 50);
+tft.setTextColor(GREEN);
+tft.setTextSize(3);
+tft.setRotation(1); //Landscape
+tft.println("Cartridge Frees");
+tft.setCursor(25, 200);
+tft.setTextColor(GREEN);
+tft.setTextSize(2);
+tft.setRotation(1); //Landscape
+tft.print("software version: ");
+tft.println(version);
+
+}
 // Make a menu
 void Menu3_Obj::MakeMenu(int num, int language,  int button[], int size_of_button) {
  
  //button text for 3 languages
-  String  textNL[15] = { "",  "Nullen", "Start", "Kies", "Instelling" ,"Stop", "Pauze", "Vervolg", "Engels", "Duits", "Brabants", "Taal",  "gcodesender" }; 
-  String  textGE[15] = { "",  "eins", "zwei", "drie", "vier" ,"funf", "sechs", "sieben" , "acht" , "Neun", "Zehn" , "Elb" , "Zwolf", "Sprache", "gcodesender" };
-  String  textUK[15] =  { "",  "Home", "Start", "Select", "Settings" ,"Stop", "Pause", "Resume", "English","German" , "Dutch", "Language", "gcodesender" };
+  String  textNL[18] = { "",  "Nullen", "Start", "Kies", "Instelling" ,"Stop", "Pauze", "Vervolg", "Engels", "Duits", "Brabants", "Taal",  "gcodesender", "duurproef" }; 
+  String  textGE[18] = { "",  "eins", "zwei", "drie", "vier" ,"funf", "sechs", "sieben" , "acht" , "Neun", "Zehn" , "Elb" , "Zwolf", "Sprache", "gcodesender", "dauer"  };
+  String  textUK[18] =  { "",  "Home", "Start", "Select", "Settings" ,"Stop", "Pause", "Resume", "English","German" , "Dutch", "Language", "gcodesender","endurance"  };
   
         
   
@@ -159,17 +170,13 @@ int Menu3_Obj::show_select_File(String files [], int num_of_files ) {
   X = menu_pos_x -30;   //intermediate variables Rara
   Y = menu_pos_y +35;
   String buttonlabel;   //intermediate variables
-    while (i < (num_of_files)) {  // position button in menu
+    while (i < (num_of_files+1)) {  // position button in menu
 Serial.print("In menu3   > "); 
  Serial.println(files[i]); 
 
 
     paintbutton( files[i] ,X,Y);    // create the button on the display
-    tft.setCursor(X, Y);
-  tft.setTextColor(RED);
-  tft.setTextSize(2);
-  tft.setRotation(1); //Landscape
- // tft.println(files[i]);
+
     if ( i <  (max_buttons_x_direction-1)) { Y +=button_shift_y;}
     if ( i == (max_buttons_x_direction-1)) { X +=button_shift_x; Y = menu_pos_y +35; }
     if ( i >  (max_buttons_x_direction-1)) { Y +=button_shift_y;}

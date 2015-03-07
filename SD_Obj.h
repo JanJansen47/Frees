@@ -22,10 +22,10 @@ String read_line_from_open_File();
 int close_File();
 int list_Files();
 String nextgcode(int next); 
-String gclb [10];  // gcode buffer (sores the gcl's.
+String gclb [1];  // gcode buffer (sores the gcl's.
 String gcl;         //gcl = line with gcode 
 int lptr;  	   //lptr -1 holds the number of gcodes in the file
-String filelist [8];  // tabel with the files on the SD card
+String filelist [12];  // tabel with the files on the SD card
 File gcodeFile;
 private:
 int printDirectory(File dir, int numTabs);
