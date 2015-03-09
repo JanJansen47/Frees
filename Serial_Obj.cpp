@@ -64,13 +64,35 @@ String CharstringS = "Sgcode_response_previous:  "; // previous status
 //Serial.println("na delay response Grbl");
 while (Serial3.available() ==0) {
   };
-//Serial.println("voor response Grbl");
+
+while (Serial3.available() >0) {   //++++++++++++++++++++++++++++
+    // read the incoming byte:
+    delay(3);
+    char incomingByte = Serial3.read();
+    Charstring +=   incomingByte;
+  }                                //++++++++++++++++++++++++++++++++
+Serial.print("response Grbl");Serial.println(Charstring);
 // Check Grbl's response.. if no or an error response printline after 1 second
 
 long Zeit = millis();
- finder.find("ok");   
+ //finder.find("ok");   
+ char result = ms.Match ("ook");
+if (result > 0)
+{
+Serial.print ("Found match at: ");
+Serial.println (ms.MatchStart); // 16 in this case
+Serial.print ("Match length: ");
+Serial.println (ms.MatchLength); // 3 in this case
+}
+else
+Serial.println ("No match.");
+} // end of setup 
 
-ms.Target (buf); // set its address++++++++++++++++++++++++++++++++++++++++++++++
+
+
+ms.Target (Charstring); // set its address++++++++++++++++++++++++++++++++++++++++++++++
+
+
 // possible error when no ok response within 1 seconds
 if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
