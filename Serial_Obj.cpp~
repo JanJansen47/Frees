@@ -15,7 +15,7 @@ TextFinder  finder(Serial3, 2);
 const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected                    
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 MatchState ms;
-char buf [20];
+
 Serial_Obj::Serial_Obj(int A)
 {
 int _A = A;
@@ -70,7 +70,6 @@ while (Serial3.available() ==0) {
 long Zeit = millis();
  finder.find("ok");   
 
-ms.Target (buf); // set its address++++++++++++++++++++++++++++++++++++++++++++++
 // possible error when no ok response within 1 seconds
 if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);

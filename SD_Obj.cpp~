@@ -32,7 +32,7 @@ int SD_Obj::init_SD()
   if (!SD.begin(chipSelect)) {
    Serial.println("initialization failed xx!");
     
-    return(-100);  // initialization not possible
+    return(10);
   }
   Serial.println("initialization SD done.");
   filelist [8]  = String(8);
@@ -131,7 +131,7 @@ gcodeFile.close();
 //i]);i++;};
 return(10);
 }
-return(-102);  // Read file error
+return(-102);
  }
 
 //read gcode line
@@ -159,7 +159,7 @@ Print Directories on SD
 int SD_Obj::printDirectory(File dir, int numTabs) {
 bool morefiles = true;  
 int i = 0; // count the files on the SD
-//Serial.println("------------File_List-------------------"); 
+Serial.println("------------File_List-------------------"); 
 while(morefiles) {
 
      File entry =  dir.openNextFile();
@@ -169,13 +169,13 @@ while(morefiles) {
        printDirectory(entry, numTabs+1);
      } else {
        // files have sizes, directories do not
-//     Serial.println(entry.name());
+       Serial.println(entry.name());
        filelist[i] = entry.name();  // Store file entries in tabel
        i++;
      } // eo else
    } //eo if entry
       else {morefiles=false ;
- //   Serial.println("----------------------------------------");}
+      Serial.println("----------------------------------------");}
 }// eo while morefiles
 return (i-1); // number of files on the SD
 }
