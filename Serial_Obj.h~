@@ -23,6 +23,7 @@ int send_real_time_status_request(String syscom );
 int receiveByte();
 int flush();
 void connectSerial_Serial3();  // connect Grbl controller with Mega
+MatchState ms;
 private:
 
 };

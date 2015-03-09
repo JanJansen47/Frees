@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "Serial_Obj.h" 
-#include <Regexp.h>
+#include "Regexp.h"
 /*
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the communication with the Grbl Controller. 
@@ -14,7 +14,7 @@
 TextFinder  finder(Serial3, 2);
 const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected                    
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
-MatchState ms;
+//MatchState ms;
 char buf [20];
 Serial_Obj::Serial_Obj(int A)
 {
@@ -35,7 +35,7 @@ int Serial_Obj::sendsyscom(String syscom )
 {
   String Charstring = "SCommand_response:  ";
   Serial3.println(syscom);
-   while (Serial3.available() ==0) {
+  while (Serial3.available() ==0) {
   };
   while (Serial3.available() >0) {
     // read the incoming byte:
@@ -76,13 +76,13 @@ Serial.print("response Grbl");Serial.println(Charstring);
 
 long Zeit = millis();
  //finder.find("ok");   
- char result = ms.Match ("ook");
+ char result =   '0'; //ms.Match ("ook");
 if (result > 0)
 {
 Serial.print ("Found match at: ");
-Serial.println (ms.MatchStart); // 16 in this case
+//Serial.println (ms.MatchStart); // 16 in this case
 Serial.print ("Match length: ");
-Serial.println (ms.MatchLength); // 3 in this case
+//Serial.println (ms.MatchLength); // 3 in this case
 }
 else
 Serial.println ("No match.");
