@@ -76,7 +76,7 @@ Serial.print("response Grbl");Serial.println(Charstring);
 
 long Zeit = millis();
  //finder.find("ok");   
- char result = ms.Match ("ok");
+ char result = ms.Match ("ook");
 if (result > 0)
 {
 Serial.print ("Found match at: ");
