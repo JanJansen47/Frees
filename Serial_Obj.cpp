@@ -16,7 +16,7 @@ const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 // match state object
 MatchState ms;
-char buf [30];
+char buf [40];
 Serial_Obj::Serial_Obj(int A)
 {
 int _A = A;
@@ -60,41 +60,26 @@ Serial3.println(gcode);
 String Charstring = "Sgcode_response_current  :  ";
 String CharstringS = "Sgcode_response_previous:  "; // previous status
   
-Serial3.println(gcode);  //??????????????????????????????????????????????
-  delay(3);
-//Serial.println("na delay response Grbl");
-
-
 // receive response from Grbl
 while (Serial3.available() ==0) {
   };
 
-// new regexp to check Grbl's response
 int i=0;
 while (Serial3.available() >0) {		
     // read the incoming byte:
-    delay(5);
      buf[i] = Serial3.read();
      i++;
   }
-while (i < 30) {buf[i] = ' ';i++;}  //file the rest of the buffer with spaces
+
+while (i < 40) {buf[i] = ' ';i++;}  //fill the rest of the buffer with spaces
 ms.Target (buf);  // set its address
 
 // Check 'ok' in  Grbl's response
 char result = ms.Match ("ok");
   
-  if (result > 0)
-    {
-    Serial.print ("Found match at: ");
-    Serial.println (ms.MatchStart);        // 16 in this case     
-    Serial.print ("Match length: ");
-    Serial.println (ms.MatchLength);       // 3 in this case
-    }
-  else
-    Serial.println ("No match.");
-
-// eo new regex
-
+  if (result = 0)
+    {if( ms.Match ("error") > 0) { return(301);} else return (302);
+   }
 
 //Serial.println("voor response Grbl");
 // Check Grbl's response.. if no or an error response printline after 1 second
