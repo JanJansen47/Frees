@@ -54,17 +54,17 @@ Send gcodes to Grbl  Results in Ok window
 */
 int Serial_Obj::sendgcode(String gcode )
 {
-
+Serial3.flush();// flush the Serial3 buffers  // doet dit iets??????
+int i = 0;
+while (i < 40) {buf[i] = ' ' ;i++;}  //fill the rest of the buffer with spaces
 //Sent gcode
 Serial3.println(gcode);
-String Charstring = "Sgcode_response_current  :  ";
-String CharstringS = "Sgcode_response_previous:  "; // previous status
   
 // receive response from Grbl
 while (Serial3.available() ==0) {
   };
 
-int i=0;
+ i=0;
 while (Serial3.available() >0) {		
     // read the incoming byte:
      buf[i] = Serial3.read();
@@ -72,64 +72,18 @@ while (Serial3.available() >0) {
   }
 
 while (i < 40) {buf[i] = ' ';i++;}  //fill the rest of the buffer with spaces
+Serial.println(buf); 
 ms.Target (buf);  // set its address
 
 // Check 'ok' in  Grbl's response
 char result = ms.Match ("ok");
   
   if (result = 0)
-    {if( ms.Match ("error") > 0) { return(301);} else return (302);
+    {if( ms.Match ("error") > 0) { return(301); Serial.println("result = error"); }else return (302);
    }
-
-//Serial.println("voor response Grbl");
-// Check Grbl's response.. if no or an error response printline after 1 second
-
-long Zeit = millis();
-  
-// check errors
-if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
-Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
-
-Serial3.println("?");// request status 
-while (Serial3.available() ==0) {
-  };
-  while (Serial3.available() >0) {
-    // read the incoming byte:
-    delay(5);
-     char incomingByte = Serial3.read();
-    Charstring +=   incomingByte;
-  }
-  //Serial.println(CharstringS);
-  Serial.println(Charstring);
-
-}
-/*
-// store previous reading
- Serial3.println("?");// request status 
-while (Serial3.available() ==0) {
-  };
-  while (Serial3.available() >0) {
-    // read the incoming byte:
-    delay(5);
-     char incomingByte = Serial3.read();
-    CharstringS +=   incomingByte;
-  }
-*/
+Serial.println("result = ok");
 delay(1);  // give Grbl some time before starting a new command
  
-
-/*
-  while (Serial3.available() ==0) {
-  };
-  while (Serial3.available() >0) {
-    // read the incoming byte:
-    delay(5);
-     char incomingByte = Serial3.read();
-    Charstring +=   incomingByte;
-  }
-
-  Serial.println(Charstring);
-*/
   return(10);
 }
 /********************************************
