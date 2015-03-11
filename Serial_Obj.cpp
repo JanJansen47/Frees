@@ -57,7 +57,7 @@ String CharstringS = "Sgcode_response_previous:  "; // previous status
 
 
   
-  Serial3.println(gcode);
+  //Serial3.println(gcode);
   delay(3);
 //Serial.println("na delay response Grbl");
 while (Serial3.available() ==0) {
