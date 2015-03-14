@@ -16,7 +16,7 @@ const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 // match state object
 MatchState ms;
-char buf [40];
+char buf [100];
 Serial_Obj::Serial_Obj(int A)
 {
 int _A = A;
@@ -54,9 +54,9 @@ Send gcodes to Grbl  Results in Ok window
 */
 int Serial_Obj::sendgcode(String gcode )
 {
-Serial3.flush();// flush the Serial3 buffers  // doet dit iets??????
+//Serial3.flush();// flush the Serial3 buffers  // doet dit iets??????
 int i = 0;
-while (i < 40) {buf[i] = ' ' ;i++;}  //fill the rest of the buffer with spaces
+while (i < 100) {buf[i] = 'V' ;i++;}  //fill the rest of the buffer with spaces
 //Sent gcode
 Serial3.println(gcode);
   
@@ -68,21 +68,28 @@ while (Serial3.available() ==0) {
 while (Serial3.available() >0) {		
     // read the incoming byte:
      buf[i] = Serial3.read();
+delay(3); //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      i++;
   }
+Serial.print(" i=: ");Serial.println(i); 
 
-while (i < 40) {buf[i] = ' ';i++;}  //fill the rest of the buffer with spaces
 Serial.println(buf); 
 ms.Target (buf);  // set its address
-
-// Check 'ok' in  Grbl's response
-char result = ms.Match ("ok");
+delay(5); //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Check 'error' in  Grbl's response
+char result = ms.Match ("error");
   
-  if (result = 0)
-    {if( ms.Match ("error") > 0) { return(301); Serial.println("result = error"); }else return (302);
-   }
-Serial.println("result = ok");
-delay(1);  // give Grbl some time before starting a new command
+  if (result > 0)
+    {
+    return(-301);
+    }
+  // Check 'alarm' in  Grbl's response
+result = ms.Match ("alarm");
+  
+  if (result > 0)
+    {
+    return(-302);
+    }
  
   return(10);
 }
@@ -121,7 +128,7 @@ while (Serial3.available() ==0) {
   for(fieldIndex=0; fieldIndex < NUMBER_OF_FIELDS; fieldIndex++)
    Serial.print(values[fieldIndex]);         
    Serial.println();
-
+finder.find(">");  // empty the "?"  request
 
   return(10);
 }
