@@ -4,8 +4,8 @@
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the communication with the Grbl Controller. 
  Auth: J. Jansen
- Date: 17-02-2015
- Version: 0.1
+ Date: 14-03-2015
+ Version: 0.2
  
  */
 
