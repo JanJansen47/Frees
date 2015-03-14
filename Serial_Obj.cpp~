@@ -57,26 +57,28 @@ Serial3.println(gcode);
 String Charstring = "Sgcode_response_current  :  ";
 String CharstringS = "Sgcode_response_previous:  "; // previous status
 
-
-gcode.toCharArray(buf,50);  // covert the gcode into the buf array
-ms.Target (buf);            // set buf for matching 
-unsigned int count = ms.MatchCount ("[GMXYZF]");  // count the  number of gcodes in one SD line
+ms.Target (buf);  // set its address
+gcode.toCharArray(buf,50); // covert the gcode into the buf array
+Serial.println(buf); 
+  unsigned int count = ms.MatchCount ("[MXYZF]");
   
- // Serial.println (buf);
- // Serial.print ("Found ");
- // Serial.print (count);            
- // Serial.println (" matches.");
- //delay(3);
- //Serial.println("na delay response Grbl");
+  Serial.println (buf);
+  Serial.print ("Found ");
+  Serial.print (count);            // 11 in this case
+  Serial.println (" matches.");
+  
+  //Serial3.println(gcode);
+  delay(3);
+//Serial.println("na delay response Grbl");
 while (Serial3.available() ==0) {
   };
- //Serial.println("voor response Grbl");
- //Check Grbl's response.. if no or an error response printline after 1 second
+//Serial.println("voor response Grbl");
+// Check Grbl's response.. if no or an error response printline after 1 second
 
 long Zeit = millis();
- for (int i=0; i<count;) {finder.find("ok");i++ ; } // check "ok" for each counted gcode  
+ finder.find("ok");   
 
- // check errors  ++++++++++++++Unfinished+++++++++++++++++++++
+// check errors
 if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
 
