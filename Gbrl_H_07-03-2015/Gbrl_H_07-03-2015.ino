@@ -1,7 +1,10 @@
 
+#include <Serial_Obj.h>
 #include <Menu3_Obj.h>
 #include <SD_Obj.h>
-#include <Serial_Obj.h>
+
+
+
 #include "Arduino.h"
 #include "SPI.h"
 #include "SD.h"
@@ -11,7 +14,7 @@
 /*
  Grbl Controller for the Grbl on a arduino uno. 
  Auth: J. Jansen
- Date: 17-02-2015
+ Date: 14-03-2015
  */
 int version; 
  
@@ -37,7 +40,7 @@ int repeat = 1;  // Normal : rune once  Demo run 10 times
 
 void setup()
 {
-  version = 1.2; 
+  version = 13; 
   // temp input touch 
   pinMode(22, INPUT);           // set pin to input
   digitalWrite(22, HIGH);       // turn on pullup resistors
@@ -154,12 +157,11 @@ void loop()
               // Stop and return to menu "Main" 
               break; 
             case 2:  
-              Serial.println(" in case2 voor slipt resume stop");
-              {
+                            {
                 while (chose()== 0) {
                 };
-                Serial.println(" in case2 voor slipt resume stop na chose()");
-                delay(1000);
+                
+                delay(500);
                 /* ************************************
                  Menulevel 3-3 (Stop resume /2
                  Frees)
