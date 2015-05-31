@@ -10,7 +10,7 @@
  */
 
 
-TextFinder  finder(Serial3, 2);
+TextFinder  finder(Serial3, 10);  // 23-05-2015 was 2 seconden...
 const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected                    
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 MatchState ms;                  // Regexp class
@@ -77,7 +77,7 @@ long Zeit = millis();
  for (int i=0; i<count;) {finder.find("ok");i++ ; } // check "ok" for each counted gcode  
 
  // check errors  ++++++++++++++Unfinished+++++++++++++++++++++
-if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
+if((millis()-Zeit)>10000) {Serial.println("timeout response Grbl");  // 23-05-2015 was een seconde
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
 
 Serial3.println("?");// request status 
