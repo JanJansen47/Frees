@@ -293,7 +293,7 @@ void loop()
           }   //AA
         case 2:       //BB
           ZZ.information("gsender active");
-// update 03-06
+        // update 03-06
           Serial3.write('CTRL-X'); // Reset Grbl
           // read from port 3, send to port 0:
           while (1==1) {
