@@ -1,3 +1,3 @@
 # Frees
-Frees gebaseerd op Grbl 
-dat is alles
+Demo Software Maart 2015
+Deze software werkt met gcode bestanden vanaf een SD kaart
