@@ -91,6 +91,43 @@ return (gcl);
   	 }  //eo while available
 	} // eo if gcodefile 
       }  // eo read_line_from_open_File
+
+
+/************************************************************** 
+getdata 
+ Reads String pcl and tries to find char 'l'. If l of the ',' 
+ separating data is not found the procedure return -1. 
+**************************************************************
+  */
+int SD_Obj::getdat(float pdata[], char l,  String pcl)
+{ 
+  int ind1;
+  int ind2;
+  ind1 = pcl.indexOf(l);
+  if (ind1<0) {
+    return (ind1);
+  };  // char not present => error
+  ind2 = pcl.indexOf(',');
+  if (ind2<0) {
+    return (ind2);
+  };  // char not present => error
+  pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
+  ind1 = pcl.indexOf(',', ind2+1);
+  pdata[1] =  pcl.substring(ind2+1, ind1).toFloat();
+}
+
+/************************************************************** 
+getgcode
+ Reads String pcl and tries to find char 'x'. If return is > 0 the gcode is in the next line
+**************************************************************
+  */
+int SD_Obj::getgcode(char l, String pcl)
+{
+  int ind1;
+  ind1 = pcl.indexOf(l);
+  return (ind1);
+}
+
 /* *************************************************
 Close file from SD
 ****************************************************

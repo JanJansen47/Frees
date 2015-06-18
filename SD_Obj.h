@@ -19,6 +19,8 @@ int init_SD();  // initialize the SD disk
 int read_File(String Filename); // reads one gcode
 int open_File(String Filename);
 String read_line_from_open_File();
+int getdat(float pdata[],char l,String pcl);  // rel1 used to implement "subroutines" reads the data from SD
+int getgcode(char l, String pcl);  // rel 1 used to find a line with gcode
 int close_File();
 int list_Files();
 String nextgcode(int next); 
