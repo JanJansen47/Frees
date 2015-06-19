@@ -111,9 +111,9 @@ int SD_Obj::getdat(float pdata[], char l,  String pcl)
   if (ind2<0) {
     return (ind2);
   };  // char not present => error
-  pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
+  pdata[0] = 12; // pcl.substring(ind1+1 , ind2).toFloat(); 
   ind1 = pcl.indexOf(',', ind2+1);
-  pdata[1] =  pcl.substring(ind2+1, ind1).toFloat();
+  pdata[1] = 13; // pcl.substring(ind2+1, ind1).toFloat();
 }
 
 /************************************************************** 
