@@ -1,22 +1,22 @@
 #include "Arduino.h"
-
+#include <LiquidCrystal.h>
 /*
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the communication with the Grbl Controller. 
  Auth: J. Jansen
- Date: 17-02-2015
+ Date: 17-06-2015
  Version: 0.1
  
  */
-#ifndef Menu3_Obj_h
-#define Menu3_Obj_h
+#ifndef Menu4_Obj_h
+#define Menu4_Obj_h
 
 
 
-class Menu3_Obj
+class Menu4_Obj
 {
 public:
-Menu3_Obj(int A);  //constructor
+Menu4_Obj(int A);  //constructor
 int init_LCD(String txt );
 void Welcome(int language, int version );
 void MakeMenu(int num,int language, int button[], int size_of_button);
