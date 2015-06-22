@@ -95,14 +95,15 @@ Serial.println(textNL[button[i]]);
 // display the Cartridge files on disk and select one
 int Menu4_Obj::show_select_File(String files [], int num_of_files ) {
   int i= 0; 
+for (int j=0;j<4;j++) {LCD.setCursor(0,j-1); LCD.print("                    ");}  // blank first three rows
    while (i < (num_of_files+1)) {  // position button in menu
 Serial.print("In Menu4   > "); 
- Serial.println(files[i]); 
-while (i < (num_of_files+1)) {  // position button in menu
+ while (i < (num_of_files+1)) {  // position button in menu
     if (i<4) {LCD.setCursor(0,i);}
     if (i>4 ) {LCD.setCursor(10,(i-3));}
-    LCD.print("  "); // space for >
+    LCD.print(" "); // space for >
     LCD.print( files[i]);    //     
+    Serial.println(files[i]);
     i++;
   }
 return(1); 
@@ -117,16 +118,16 @@ return(1);
 
 // display the x, y position
 void Menu4_Obj::position(String position){
-  LCD.setCursor(7,4);
-  LCD.print("                   ");
-  LCD.setCursor(7,4);
+  LCD.setCursor(4,4);
+  LCD.print("               ");
+  LCD.setCursor(4,4);
   LCD.print(position);
    }
 //displays the name of the product (cartridge
 void Menu4_Obj::product(String product){
-  LCD.setCursor(14,4);
-  LCD.print("       ");
-  LCD.setCursor(14,4);
+  LCD.setCursor(10,4);
+  LCD.print("      ");
+  LCD.setCursor(10,4);
   LCD.print(product);
  }
 
