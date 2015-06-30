@@ -1,3 +1,7 @@
+#include <SPI.h>
+
+#include <SD.h>
+
 /*
 
 
@@ -7,15 +11,9 @@
 #include <LiquidCrystal.h>
 #include "M2tk.h"
 #include "utility/m2ghlc.h"
-
+#include "Serial_Obj.h"
 LiquidCrystal lcd(44, 46, 48, 43, 45, 47,49);
 
-//=================================================
-// Forward declaration of the toplevel element
-M2_EXTERN_ALIGN(top_menu);
-
-//=================================================
-// Simple dialog: Input two values n1 and n2
 
 uint8_t x_pos = 0;
 uint8_t y_pos = 0;
