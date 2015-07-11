@@ -23,6 +23,7 @@ int getdat(float pdata[],char l,String pcl);  // rel1 used to implement "subrout
 int getgcode(char l, String pcl);  // rel 1 used to find a line with gcode
 int close_File();
 int list_Files();
+int fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITCH[2], int INDEX[2], int *GCODENUM , char gcode_buffer_first_set[][30], char gcode_buffer_second_set [][30]);
 String nextgcode(int next); 
 String gclb [1];  // gcode buffer (sores the gcl's.
 String gcl;         //gcl = line with gcode 

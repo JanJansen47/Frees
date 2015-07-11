@@ -92,6 +92,37 @@ return (gcl);
 	} // eo if gcodefile 
       }  // eo read_line_from_open_File
 
+/************************************************************** 
+fillcartridge data
+
+ **************************************************************
+  */
+int SD_Obj::fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITCH[2], int INDEX[2], int *GCODENUM , char gcode_buffer_first_set[][30], char gcode_buffer_second_set [][30])
+{
+String pcl;
+STARTCO[0] = 12.2;
+char buf[30]  = {1,2,3,4,5};
+int no_of_lines = open_File(cartridgeFile);
+
+for (int i =0; i < no_of_lines; i++) {
+pcl = read_line_from_open_File();
+ int index1 =getgcode('#',pcl); if( index1 >0) {
+Serial.println(index1);
+//pcl= read_line_from_open_File();
+pcl.toCharArray(buf,pcl.length());
+Serial.println(buf);
+char * P;
+P = buf;
+*gcode_buffer_first_set[4,0] = 'K';
+*gcode_buffer_first_set[0] = 'd', 'a';
+*gcode_buffer_first_set[1,8] = *buf+7;  // compileert maar rubisch
+*gcode_buffer_first_set[2] = *buf;
+}
+}
+
+
+
+}
 
 /************************************************************** 
 getdata 
