@@ -10,37 +10,37 @@
  */
 
 
-TextFinder  finder(Serial2, 20);  // 23-05-2015 was 2 seconden...  09-07-2015 was 10 seconden
+TextFinder  finder(Serial3, 2);
 const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields  expected                    
 float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
 MatchState ms;                  // Regexp class
-char buf [100];                 // Buffer to store Serial2 input
+char buf [100];                 // Buffer to store serial3 input
 
 Serial_Obj::Serial_Obj(int A)
 {
 int _A = A;
-Serial2.begin(115200);
-Serial.println ("Serial2 started");
+Serial3.begin(115200);
+Serial.println ("Serial3 started");
  
 }
 
 /*
 Send system commands to Grbl 
 Results in System command output window
- 
+
 */
 
 int Serial_Obj::sendsyscom(String syscom )
 
 {
   String Charstring = "SCommand_response:  ";
-  Serial2.println(syscom);
-   while (Serial2.available() ==0) {
+  Serial3.println(syscom);
+   while (Serial3.available() ==0) {
   };
-  while (Serial2.available() >0) {
+  while (Serial3.available() >0) {
     // read the incoming byte:
     delay(3);
-    char incomingByte = Serial2.read();
+    char incomingByte = Serial3.read();
     Charstring +=   incomingByte;
   }
   Serial.println(Charstring);
@@ -53,48 +53,42 @@ Send gcodes to Grbl
 */
 int Serial_Obj::sendgcode(String gcode )
 {
-//Serial.println("1");
-//Serial.println(gcode);
-//Serial.println("2");
-Serial2.println(gcode);
+Serial3.println(gcode);
 String Charstring = "Sgcode_response_current  :  ";
 String CharstringS = "Sgcode_response_previous:  "; // previous status
 
-
-gcode.toCharArray(buf,50);  // covert the gcode into the buf array
-ms.Target (buf);            // set buf for matching 
-unsigned int count = ms.MatchCount ("[GMXYZF]");  // count the  number of gcodes in one SD line
- 
- //Serial.println (buf);
- //Serial.print ("Found total ");
- //Serial.print (count);            
- //Serial.println (" matches.");
- unsigned int countxyz = ms.MatchCount ("[XYZ]");  // count the  number of xyz  gcodes in one SD line 
-//Serial.print ("Found xyz   ");
-// Serial.print (countxyz);            
- //Serial.println (" matches.");
-
- //delay(3); 
- //Serial.println("na delay response Grbl");
-while (Serial2.available() ==0) {
+ms.Target (buf);  // set its address
+gcode.toCharArray(buf,50); // covert the gcode into the buf array
+Serial.println(buf); 
+  unsigned int count = ms.MatchCount ("[MXYZF]");
+  
+  Serial.println (buf);
+  Serial.print ("Found ");
+  Serial.print (count);            // 11 in this case
+  Serial.println (" matches.");
+  
+  //Serial3.println(gcode);
+  delay(3);
+//Serial.println("na delay response Grbl");
+while (Serial3.available() ==0) {
   };
- //Serial.println("voor response Grbl");
- //Check Grbl's response.. if no or an error response printline after 1 second
+//Serial.println("voor response Grbl");
+// Check Grbl's response.. if no or an error response printline after 1 second
 
 long Zeit = millis();
- for (int i=0; i<(count-countxyz+1);) {finder.find("ok");i++ ; } // check "ok" for each counted gcode  
+ finder.find("ok");   
 
- // check errors  ++++++++++++++Unfinished+++++++++++++++++++++
-if((millis()-Zeit)>20000) {Serial.println("timeout response Grbl");  // 23-05-2015 was een seconde
+// check errors
+if((millis()-Zeit)>1000) {Serial.println("timeout response Grbl");
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
 
-Serial2.println("?");// request status 
-while (Serial2.available() ==0) {
+Serial3.println("?");// request status 
+while (Serial3.available() ==0) {
   };
-  while (Serial2.available() >0) {
+  while (Serial3.available() >0) {
     // read the incoming byte:
     delay(5);
-     char incomingByte = Serial2.read();
+     char incomingByte = Serial3.read();
     Charstring +=   incomingByte;
   }
   //Serial.println(CharstringS);
@@ -103,13 +97,13 @@ while (Serial2.available() ==0) {
 }
 /*
 // store previous reading
- Serial2.println("?");// request status 
-while (Serial2.available() ==0) {
+ Serial3.println("?");// request status 
+while (Serial3.available() ==0) {
   };
-  while (Serial2.available() >0) {
+  while (Serial3.available() >0) {
     // read the incoming byte:
     delay(5);
-     char incomingByte = Serial2.read();
+     char incomingByte = Serial3.read();
     CharstringS +=   incomingByte;
   }
 */
@@ -117,12 +111,12 @@ delay(1);  // give Grbl some time before starting a new command
  
 
 /*
-  while (Serial2.available() ==0) {
+  while (Serial3.available() ==0) {
   };
-  while (Serial2.available() >0) {
+  while (Serial3.available() >0) {
     // read the incoming byte:
     delay(5);
-     char incomingByte = Serial2.read();
+     char incomingByte = Serial3.read();
     Charstring +=   incomingByte;
   }
 
@@ -136,9 +130,9 @@ receivebyte Grbl
 */
 int Serial_Obj::receiveByte(){
   //Serial.begin(115200);
-  while (Serial2.available() > 0) {
+  while (Serial3.available() > 0) {
     // read the incoming byte:
-    char incomingByte = Serial2.read();
+    char incomingByte = Serial3.read();
     Serial.println(incomingByte);
   }
 }
@@ -147,15 +141,15 @@ real time status  Grbl
 *********************************************
 */
 int Serial_Obj::send_real_time_status_request(String syscom )
-{  Serial2.println(syscom);
-while (Serial2.available() ==0) {
+{  Serial3.println(syscom);
+while (Serial3.available() ==0) {
   };
   
   const int NUMBER_OF_FIELDS = 3; // 3 comma seperated fields expected                                    
   float values[NUMBER_OF_FIELDS];   // array holding values for all the fields
   //Serial.println("net voor de textfinder");
   int fieldIndex = 0;            // the current field being received
-  while (Serial2.available() ==0) {
+  while (Serial3.available() ==0) {
   };
   finder.find("MPos:");  
  //Serial.println("net na de textfinder");
@@ -177,25 +171,25 @@ Results in information window
 */
 int Serial_Obj::flush()
 {
-  Serial2.flush();
+  Serial3.flush();
   Serial.println("flush done"); 
   return(10);
 }
 
-/* pass serial interface to Serial2 interface
+/* pass serial interface to Serial3 interface
 This is necessary to have one USB connection for both the Grbl controller and Mega.
 */
-void Serial_Obj::connectSerial_Serial2(){
+void Serial_Obj::connectSerial_Serial3(){
    // read from port 3, send to port 0:
-  if (Serial2.available()) {
-    int inByte = Serial2.read();
+  if (Serial3.available()) {
+    int inByte = Serial3.read();
     Serial.write(inByte); 
   }
   
   // read from port 0, send to port 3:
   if (Serial.available()) {
     int inByte = Serial.read();
-    Serial2.write(inByte); 
+    Serial3.write(inByte); 
   }
   }
 

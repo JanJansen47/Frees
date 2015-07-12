@@ -61,7 +61,7 @@ String CharstringS = "Sgcode_response_previous:  "; // previous status
 gcode.toCharArray(buf,50);  // covert the gcode into the buf array
 ms.Target (buf);            // set buf for matching 
 unsigned int count = ms.MatchCount ("[GMXYZF]");  // count the  number of gcodes in one SD line
-  
+  // hiermoeten we een reparatie uitvoeren!!
  // Serial.println (buf);
  // Serial.print ("Found ");
  // Serial.print (count);            

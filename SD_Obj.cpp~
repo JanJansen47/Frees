@@ -101,7 +101,7 @@ int SD_Obj::fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITC
 {
 String pcl;
 STARTCO[0] = 12.2;
-char buf[30]  = {1,2,3,4,5};
+char *buf  = " Jan Jansen";
 int no_of_lines = open_File(cartridgeFile);
 
 for (int i =0; i < no_of_lines; i++) {
@@ -109,14 +109,18 @@ pcl = read_line_from_open_File();
  int index1 =getgcode('#',pcl); if( index1 >0) {
 Serial.println(index1);
 //pcl= read_line_from_open_File();
-pcl.toCharArray(buf,pcl.length());
+//pcl.toCharArray(buf,pcl.length());
 Serial.println(buf);
 char * P;
 P = buf;
-gcode_buffer_first_set[4,0] = 'K';
+*gcode_buffer_first_set[3] = 'K';
 *gcode_buffer_first_set[0] = 'd', 'a';
 *gcode_buffer_first_set[1,8] = *buf+7;  // compileert maar rubisch
 *gcode_buffer_first_set[2] = *buf;
+//gcode_buffer_first_set[4] = "Jan Pietersen                ";
+gcode_buffer_first_set[4][0] = buf[1];
+    gcode_buffer_first_set[4][1] = buf[2];
+    gcode_buffer_first_set[4][2] = buf[3];
 }
 }
 
