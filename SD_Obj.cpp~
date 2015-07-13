@@ -6,8 +6,8 @@
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the SD disk I/O. 
  Auth: J. Jansen
- Date: 17-02-2015
- Version: 0.1
+ Date: 11-07-2015
+ Version: 0.3
  
  */
 File gcodeFile;
@@ -97,36 +97,71 @@ fillcartridge data
 
  **************************************************************
   */
-int SD_Obj::fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITCH[2], int INDEX[2], int *GCODENUM , char gcode_buffer_first_set[][30], char gcode_buffer_second_set [][30])
+int SD_Obj::fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITCH[2], int INDEX[2], int info[2] , char gcode_buffer_first_set[][30], char gcode_buffer_second_set [][30])
 {
 String pcl;
-STARTCO[0] = 12.2;
-char *buf  = " Jan Jansen";
 int no_of_lines = open_File(cartridgeFile);
-
-for (int i =0; i < no_of_lines; i++) {
+int index1, index2,index3, test;
+char instr;
+char buf[30];
+// read and store gcode file parameters and gcode line index's
+// check lines in cartridge file for O,H,B,M,#,* and &
+for( int i=0; i< no_of_lines;i++) {
 pcl = read_line_from_open_File();
- int index1 =getgcode('#',pcl); if( index1 >0) {
-Serial.println(index1);
-//pcl= read_line_from_open_File();
-//pcl.toCharArray(buf,pcl.length());
-Serial.println(buf);
-char * P;
-P = buf;
-*gcode_buffer_first_set[3] = 'K';
-*gcode_buffer_first_set[0] = 'd', 'a';
-*gcode_buffer_first_set[1,8] = *buf+7;  // compileert maar rubisch
-*gcode_buffer_first_set[2] = *buf;
-//gcode_buffer_first_set[4] = "Jan Pietersen                ";
-gcode_buffer_first_set[4][0] = buf[1];
-    gcode_buffer_first_set[4][1] = buf[2];
-    gcode_buffer_first_set[4][2] = buf[3];
+float INDEX_S[2], GCODENUM_S[2];
+getdat (STARTCO,    'O', pcl);
+getdat (PITCH,      'H', pcl);
+getdat (INDEX_S,    'B', pcl);
+getdat (GCODENUM_S, 'M', pcl);
+if (getgcode ('#', pcl) > 0) {index1 = i+1;}  // gcode starts at the next line (+1)
+if (getgcode ('*', pcl) > 0) {index2 = i+1;}  // gcode starts at the next line (+1)
+if (getgcode ('&', pcl) > 0) {index3 = i;}
+INDEX[0] = (int)INDEX_S[0];INDEX[1] = (int)INDEX_S[1];  // index og the two gcode sets
+info[0] = (int)GCODENUM_S[0];
+//Serial.print(" gcodenumf:  "); Serial.println(GCODENUM_S[0]);Serial.print(" gcodenumi:  ");Serial.println(info[0]);
+
 }
-}
+close_File();
+
+// read and store gcode files
+open_File(cartridgeFile);
+//skip lines before first gcode line
+for (int i =0; i< index1;i++) { read_line_from_open_File();} // skip lines to start at first set of gcode lines
+
+//first gcode set
+Serial.println("first set");
+for (int j =index1; j < index2-1; j++) { 
+pcl =read_line_from_open_File();  
+int k=0;
+instr = pcl.charAt(0);
+while (instr != NULL & instr != 10) { 
+gcode_buffer_first_set[j-index1][k] = instr; // copy char in gcode buffer
+k++;
+instr =pcl.charAt(k);//Serial.print(instr)
+Serial.print(instr);
+ }
+Serial.println("END");
+};
+
+//second gcode set
+if (info[0]=2){   // is there a second gcode set?
+read_line_from_open_File(); //skip line between gcode set 1 and 2
+Serial.println("sec set");
+for (int j =index2; j < index3; j++) {
+pcl = read_line_from_open_File();
+int k=0;
+instr = pcl.charAt(0);
+while (instr != NULL) { instr =pcl.charAt(k);//Serial.print(instr); 
+gcode_buffer_second_set[j-index2][k] = instr; // copy char in gcode buffer
+k++;
+}; // eo fill buffer
+} // gcode lines
+}// eo is there a second gcode set
+close_File();
+ }
 
 
 
-}
 
 /************************************************************** 
 getdata 
@@ -146,9 +181,9 @@ int SD_Obj::getdat(float pdata[], char l,  String pcl)
   if (ind2<0) {
     return (ind2);
   };  // char not present => error
-  pdata[0] = 12; // pcl.substring(ind1+1 , ind2).toFloat(); 
+  pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
   ind1 = pcl.indexOf(',', ind2+1);
-  pdata[1] = 13; // pcl.substring(ind2+1, ind1).toFloat();
+  pdata[1] = pcl.substring(ind2+1, ind1).toFloat();
 }
 
 /************************************************************** 

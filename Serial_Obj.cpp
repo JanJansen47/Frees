@@ -4,8 +4,8 @@
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the communication with the Grbl Controller. 
  Auth: J. Jansen
- Date: 14-03-2015
- Version: 0.2
+ Date: 11-07-2015
+ Version: 0.3
  
  */
 
@@ -60,6 +60,7 @@ String CharstringS = "Sgcode_response_previous:  "; // previous status
 
 gcode.toCharArray(buf,50);  // covert the gcode into the buf array
 ms.Target (buf);            // set buf for matching 
+unsigned int countxyz = ms.MatchCount ("[XYZ]");  // count xyz gcodes in one SD line
 unsigned int count = ms.MatchCount ("[GMXYZF]");  // count the  number of gcodes in one SD line
   // hiermoeten we een reparatie uitvoeren!!
  // Serial.println (buf);
@@ -74,10 +75,10 @@ while (Serial3.available() ==0) {
  //Check Grbl's response.. if no or an error response printline after 1 second
 
 long Zeit = millis();
- for (int i=0; i<count;) {finder.find("ok");i++ ; } // check "ok" for each counted gcode  
+ for (int i=0; i<count-(countxyz-1);) {finder.find("ok");i++ ; } // check "ok" for each counted gcode  
 
  // check errors  ++++++++++++++Unfinished+++++++++++++++++++++
-if((millis()-Zeit)>10000) {Serial.println("timeout response Grbl");  // 23-05-2015 was een seconde
+if((millis()-Zeit)>20000) {Serial.println("timeout response Grbl");  // 23-05-2015 was een seconde
 Serial.print("na zeit Grbl  : ");Serial.println(millis()-Zeit);
 
 Serial3.println("?");// request status 
