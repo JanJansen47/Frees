@@ -129,7 +129,7 @@ open_File(cartridgeFile);
 for (int i =0; i< index1;i++) { read_line_from_open_File();} // skip lines to start at first set of gcode lines
 
 //first gcode set
-Serial.println("first set");
+//Serial.println("first set");
 for (int j =index1; j < index2-1; j++) { 
 pcl =read_line_from_open_File();  
 int k=0;
@@ -138,22 +138,22 @@ while (instr != NULL & instr != 10) {
 gcode_buffer_first_set[j-index1][k] = instr; // copy char in gcode buffer
 k++;
 instr =pcl.charAt(k);//Serial.print(instr)
-Serial.print(instr);
  }
-Serial.println("END");
+
 };
 
 //second gcode set
 if (info[0]=2){   // is there a second gcode set?
 read_line_from_open_File(); //skip line between gcode set 1 and 2
-Serial.println("sec set");
+//Serial.println("sec set");
 for (int j =index2; j < index3; j++) {
 pcl = read_line_from_open_File();
 int k=0;
 instr = pcl.charAt(0);
-while (instr != NULL) { instr =pcl.charAt(k);//Serial.print(instr); 
+while (instr != NULL & instr != 10) {
 gcode_buffer_second_set[j-index2][k] = instr; // copy char in gcode buffer
 k++;
+instr =pcl.charAt(k);//Serial.print(instr); 
 }; // eo fill buffer
 } // gcode lines
 }// eo is there a second gcode set
@@ -181,9 +181,17 @@ int SD_Obj::getdat(float pdata[], char l,  String pcl)
   if (ind2<0) {
     return (ind2);
   };  // char not present => error
-  pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
-  ind1 = pcl.indexOf(',', ind2+1);
-  pdata[1] = pcl.substring(ind2+1, ind1).toFloat();
+
+// Rasperry does not support the arduino IDE 1.5 or higher and thus not support .toFloat() 
+
+char tempbuf[10];  // temporary solution (Raspberry pi)
+pcl.substring(ind1+1 , ind2).toCharArray(tempbuf,10); // temporary solution  (Raspberry pi)
+pdata[0]= atof(tempbuf); // temporary solution (Raspberry pi)
+//pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
+ind1 = pcl.indexOf(',', ind2+1);
+pcl.substring(ind2+1, ind1).toCharArray(tempbuf,10); // temporary solution  (Raspberry pi)
+pdata[1]= atof(tempbuf); // temporary solution (Raspberry pi)
+  //pdata[1] = pcl.substring(ind2+1, ind1).toFloat();
 }
 
 /************************************************************** 

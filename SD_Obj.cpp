@@ -181,9 +181,17 @@ int SD_Obj::getdat(float pdata[], char l,  String pcl)
   if (ind2<0) {
     return (ind2);
   };  // char not present => error
-  pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
-  ind1 = pcl.indexOf(',', ind2+1);
-  pdata[1] = pcl.substring(ind2+1, ind1).toFloat();
+
+// Rasperry does not support the arduino IDE 1.5 or higher and thus not support .toFloat() 
+
+char tempbuf[10];  // temporary solution (Raspberry pi)
+pcl.substring(ind1+1 , ind2).toCharArray(tempbuf,10); // temporary solution  (Raspberry pi)
+pdata[0]= atof(tempbuf); // temporary solution (Raspberry pi)
+//pdata[0] =  pcl.substring(ind1+1 , ind2).toFloat(); 
+ind1 = pcl.indexOf(',', ind2+1);
+pcl.substring(ind2+1, ind1).toCharArray(tempbuf,10); // temporary solution  (Raspberry pi)
+pdata[1]= atof(tempbuf); // temporary solution (Raspberry pi)
+  //pdata[1] = pcl.substring(ind2+1, ind1).toFloat();
 }
 
 /************************************************************** 
