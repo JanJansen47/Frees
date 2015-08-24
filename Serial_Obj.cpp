@@ -33,7 +33,9 @@ Results in System command output window
 int Serial_Obj::sendsyscom(String syscom )
 
 {
+#ifdef marc
   String Charstring = "SCommand_response:  ";
+
   Serial3.println(syscom);
    while (Serial3.available() ==0) {
   };
@@ -44,7 +46,10 @@ int Serial_Obj::sendsyscom(String syscom )
     Charstring +=   incomingByte;
   }
   Serial.println(Charstring);
-
+#endif
+#ifndef marc
+Serial.println(" Homing done");
+#endif
   return(10);
 }
 /********************************************
@@ -54,8 +59,9 @@ Send gcodes to Grbl
 int Serial_Obj::sendgcode(String gcode )
 {
 boolean stop = false, error =201;  // error 201 = transmission of gcode to Grbrl fails
-Serial3.println(gcode);
 Serial.println(gcode);
+#ifdef marc
+Serial3.println(gcode);
  while (Serial3.available() == 0) {
     };
     while (Serial3.available() > 0 & stop == false) {
@@ -71,7 +77,7 @@ Serial.println(gcode);
     }
     while (Serial3.available() > 0) {Serial3.read();}  // empty buffer
 
-
+#endif
 
   return(error);
 }

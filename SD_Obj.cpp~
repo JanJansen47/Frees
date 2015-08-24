@@ -35,7 +35,7 @@ int SD_Obj::init_SD()
     return(10);
   }
   Serial.println("initialization SD done.");
-  filelist [8]  = String(8);
+  //filelist [8]  = String(8);  // 22-8-2015 removed geen effect merkbaar
    
 return(11);
 } 
@@ -48,6 +48,7 @@ Open file from SD
 */
 
 int SD_Obj::open_File(String Filename) {
+Serial.println("open file from SD");
 char gcodechar;
 int i =0;
 // conversion from String to Char[]
@@ -55,6 +56,7 @@ char filename[Filename.length()+1];
 Filename.toCharArray(filename, sizeof(filename));
 //Open the file
 gcodeFile = SD.open(filename);
+Serial.println(" Gcode file open*");
 if (gcodeFile) { 
 //put char in gcode buffer 
 while (gcodeFile.available()) {
@@ -63,10 +65,15 @@ if (gcodechar == '\n') {  // check eol
 i++;}  // if eol >>  add one line
 
 }//eo while
-gcodeFile.close();
+//gcodeFile.close();
+close_File();
 gcodeFile = SD.open(filename);  // reset file to start
+Serial.println(" Gcode file open**");
 return(i); // return the number of lines in the file
  }
+// gcode file empty or does not exist?
+//gcodeFile.close();
+close_File();
 return (-101); // file does not exist
 }
 /* *************************************************
@@ -76,7 +83,7 @@ Read line from open file
 String SD_Obj::read_line_from_open_File() {
 gcl = "";  // empty String
 char gcodechar;
-//Serial.println("voor if");
+Serial.println("..Readline");
 if (gcodeFile) { 
 //put char in gcode buffer 
 //Serial.println("in if");
@@ -100,7 +107,7 @@ fillcartridge data
 int SD_Obj::fillCartridgeData(String cartridgeFile, float STARTCO[2], float PITCH[2], int INDEX[2], int info[2] , char gcode_buffer_first_set[][30], char gcode_buffer_second_set [][30])
 {
 String pcl;
-int no_of_lines = open_File(cartridgeFile);
+int no_of_lines = open_File(cartridgeFile);    // opening file for the first time to read STARTCO, PITCH INDEX etc
 int index1, index2,index3, test;
 char instr;
 char buf[30];
@@ -116,15 +123,14 @@ getdat (GCODENUM_S, 'M', pcl);
 if (getgcode ('#', pcl) > 0) {index1 = i+1;}  // gcode starts at the next line (+1)
 if (getgcode ('*', pcl) > 0) {index2 = i+1;}  // gcode starts at the next line (+1)
 if (getgcode ('&', pcl) > 0) {index3 = i;}
-INDEX[0] = (int)INDEX_S[0];INDEX[1] = (int)INDEX_S[1];  // index og the two gcode sets
+INDEX[0] = (int)INDEX_S[0];INDEX[1] = (int)INDEX_S[1];  // index of the two gcode sets
 info[0] = (int)GCODENUM_S[0];
 //Serial.print(" gcodenumf:  "); Serial.println(GCODENUM_S[0]);Serial.print(" gcodenumi:  ");Serial.println(info[0]);
 
 }
-close_File();
-
+close_File();  //  close file opened for the first time
 // read and store gcode files
-open_File(cartridgeFile);
+open_File(cartridgeFile);   // open file for the second time to read the gcodes
 //skip lines before first gcode line
 for (int i =0; i< index1;i++) { read_line_from_open_File();} // skip lines to start at first set of gcode lines
 
@@ -157,7 +163,7 @@ instr =pcl.charAt(k);//Serial.print(instr);
 }; // eo fill buffer
 } // gcode lines
 }// eo is there a second gcode set
-close_File();
+close_File();  //close file for the reading of the gcodes
  }
 
 
@@ -213,6 +219,7 @@ Close file from SD
 int SD_Obj::close_File() {  // no file name required (only one file open at a time)
 //close the file
 gcodeFile.close();
+//Serial.println("gcodefile closed");  // debugging
 }
 
 /* *************************************************
@@ -261,6 +268,7 @@ List files on SD
 ****************************************************
 */
 int SD_Obj::list_Files() {  // no file name required 
+//Serial.println("-------List_Files-- -----");
 root = SD.open("/");
 int result = printDirectory(root, 0); // return the number of files in the filelist buffer (pointer)
 root.close();
@@ -274,23 +282,23 @@ Print Directories on SD
 int SD_Obj::printDirectory(File dir, int numTabs) {
 bool morefiles = true;  
 int i = 0; // count the files on the SD
-Serial.println("------------File_List-------------------"); 
+dir.rewindDirectory();  // 22-08-2015 to be sure we have the full directory in scope and not only the next file
+//Serial.println("------------File_List---Print Directory -----"); 
 while(morefiles) {
-
      File entry =  dir.openNextFile();
      if (entry) {
        if (entry.isDirectory()) {
-       Serial.println("/");
+ //      Serial.println("/");
        printDirectory(entry, numTabs+1);
      } else {
        // files have sizes, directories do not
-       Serial.println(entry.name());
+//       Serial.println(entry.name());
        filelist[i] = entry.name();  // Store file entries in tabel
        i++;
      } // eo else
    } //eo if entry
       else {morefiles=false ;
-      Serial.println("----------------------------------------");}
+ //     Serial.println("----------------------------------------");}
 }// eo while morefiles
 return (i-1); // number of files on the SD
 }
