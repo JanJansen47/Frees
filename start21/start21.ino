@@ -5,12 +5,12 @@
 #include "utility/m2ghlc.h"
 #include "Serial_Obj.h"
 #include "SD_Obj.h"
-#define marc
+//#define marc
 /*
  Grbl Controller for the Grbl on a arduino uno.
  Auth: J. Jansen
  Date: 17-02-2015
- Date: 30-06-2015 Rel3
+ Date: 26-08-2015 Rel3
 
  Connections schema Marc
  Naar "Smartcontroller"
@@ -113,7 +113,7 @@ M2tk m2(&opstart, m2_es_arduino_rotary_encoder, m2_eh_4bd, m2_gh_lc);
 //*********************  menu_1  **********************************
 M2_LABEL(opstart_1, "x1y3", "CARTRIDGE MILL");
 M2_LABEL(opstart_2, "x1y2", "Version: ");
-M2_LABEL(opstart_3, "x10y2" , "16");
+M2_LABEL(opstart_3, "x10y2" , "16-a");
 M2_ROOT(opstart_ok, "x1y0", "OPSTARTEN", &top_el_menu2);
 M2_LIST (list_opstart) = {&opstart_1, &opstart_2, &opstart_3, &opstart_ok};
 M2_XYLIST(opstart, NULL, list_opstart);
@@ -262,17 +262,23 @@ void setup() {
   m2_SetLiquidCrystal(&lcd, 20, 4);
 
   // define button for the select message
+  #ifdef marc
+  m2.setPin(M2_KEY_SELECT, 39);
+  #endif
+   #ifndef marc
   m2.setPin(M2_KEY_SELECT, 37);
+  #endif
+  
 
   // The incremental rotary encoder is conected to these two pins
  #ifdef marc
  m2.setPin(M2_KEY_ROT_ENC_A, 40); //Wiring Marc
- #endif
- #ifndef marc
  m2.setPin(M2_KEY_ROT_ENC_B, 41);  //Wiring Marc
  #endif
+ #ifndef marc
   m2.setPin(M2_KEY_ROT_ENC_A, 35); //Wiring Jan
   m2.setPin(M2_KEY_ROT_ENC_B, 33);  //Wiring Jan
+  #endif
 }
 
 void loop() {
