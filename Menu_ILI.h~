@@ -1,0 +1,24 @@
+#include "Arduino.h"
+#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/Adafruit_GFX/Adafruit_GFX.h"
+#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/Adafruit_ILI9341/Adafruit_ILI9341.h"  //4-9
+#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/SPI/SPI.h"
+
+/*
+ Grbl Controller for the Grbl on a arduino uno.
+ This class handles the communication with the Grbl Controller. 
+ Auth: J. Jansen
+ Date: 17-02-2015
+ Version: 0.1
+ 
+ */
+#ifndef Menu_ILI_h
+#define Menu_ILI_h
+
+class Menu_ILI 
+{
+public:
+Menu_ILI(int A);  //constructor
+int init_ILI(String txt);
+private:
+};
+#endif

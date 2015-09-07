@@ -1,0 +1,40 @@
+//#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/Adafruit_GFX/Adafruit_GFX.h"
+//#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/Adafruit_ILI9341/Adafruit_ILI9341.h"  //4-9
+//#include "/home/jan/arduino-1.6.4/hardware/teensy/avr/libraries/SPI/SPI.h"
+//#include "/home/jan/arduino-1.6.4/libraries/Menu_ILI/Menu_ILI.h"
+
+#include "/home/jan/arduino-1.6.4/libraries/Frees/Adafruit_GFX.h"
+#include "/home/jan/arduino-1.6.4/libraries/Frees/Adafruit_ILI9341.h"
+#include "SPI/SPI.h"
+#include "Menu_ILI.h"
+
+
+// For the Adafruit shield, these are the default.
+#define TFT_DC 9
+#define TFT_CS 10
+#define	BLACK   0x0000
+#define	BLUE    0x001F
+#define	RED     0xF800
+#define	GREEN   0x07E0
+#define CYAN    0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW  0xFFE0
+#define WHITE   0xFFFF
+
+//Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+
+ Menu_ILI::Menu_ILI(int A)
+{   
+  ; 
+  // tft.begin();
+   //tft.fillScreen(RED);
+
+}
+
+int Menu_ILI::init_ILI( String txt)
+{   
+ // tft.begin(); 
+return(0);
+}
+
+

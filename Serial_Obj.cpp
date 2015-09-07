@@ -19,8 +19,8 @@ char buf [100];                 // Buffer to store serial3 input
 Serial_Obj::Serial_Obj(int A)
 {
 int _A = A;
-Serial3.begin(115200);
-Serial.println ("Serial3 started");
+//Serial3.begin(115200);
+//Serial.println ("Serial3 started");
  
 }
 
@@ -33,7 +33,7 @@ Results in System command output window
 int Serial_Obj::sendsyscom(String syscom )
 
 {
-#ifdef marc
+//#ifdef MEGAmarc
   String Charstring = "SCommand_response:  ";
 
   Serial3.println(syscom);
@@ -46,10 +46,10 @@ int Serial_Obj::sendsyscom(String syscom )
     Charstring +=   incomingByte;
   }
   Serial.println(Charstring);
-#endif
-#ifndef marc
+//#endif
+//#ifdef MEGAjan
 Serial.println(" Homing done");
-#endif
+//#endif
   return(10);
 }
 /********************************************
@@ -60,7 +60,7 @@ int Serial_Obj::sendgcode(String gcode )
 {
 boolean stop = false, error =201;  // error 201 = transmission of gcode to Grbrl fails
 Serial.println(gcode);
-#ifdef marc
+
 Serial3.println(gcode);
  while (Serial3.available() == 0) {
     };
@@ -76,8 +76,6 @@ Serial3.println(gcode);
       }
     }
     while (Serial3.available() > 0) {Serial3.read();}  // empty buffer
-
-#endif
 
   return(error);
 }

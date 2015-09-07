@@ -1,7 +1,8 @@
 #include "SD.h"
 #include "Arduino.h"
 #include "SD_Obj.h" 
-
+//#include "/home/jan/Arduino/testen/basic_test_gcode/config_frees.h"
+#include "/home/jan/Arduino/Vrees/MegaFinal/config_frees.h"  // let op afhankelijk van de plaats waar de config_frees.h staat
 /*
  Grbl Controller for the Grbl on a arduino uno.
  This class handles the SD disk I/O. 
@@ -26,11 +27,21 @@ Initialize SD
 */
 int SD_Obj::init_SD()
 {
-  Serial.println("SD initialization start");
-   pinMode(53, OUTPUT);  // mega specific
-  const int chipSelect = 53; // mega specific
+ Serial.println("SD initialization start");
+#ifdef MEGAmarc
+  pinMode(53, OUTPUT);  // mega specific
+ const int chipSelect = 53; // mega specific
+#endif
+#ifdef MEGAjan
+  pinMode(53, OUTPUT);  // mega specific
+ const int chipSelect = 53; // mega specific
+#endif
+#ifdef Teensy
+ pinMode(2, OUTPUT);  // Teensy specific
+ const int chipSelect = 2; // Teensy specific
+#endif
   if (!SD.begin(chipSelect)) {
-   Serial.println("initialization failed xx!");
+   Serial.println("SD initialization failed xx!");
     
     return(10);
   }
@@ -268,7 +279,7 @@ List files on SD
 ****************************************************
 */
 int SD_Obj::list_Files() {  // no file name required 
-//Serial.println("-------List_Files-- -----");
+Serial.println("-------List_Files-- -----");
 root = SD.open("/");
 int result = printDirectory(root, 0); // return the number of files in the filelist buffer (pointer)
 root.close();
@@ -283,16 +294,16 @@ int SD_Obj::printDirectory(File dir, int numTabs) {
 bool morefiles = true;  
 int i = 0; // count the files on the SD
 dir.rewindDirectory();  // 22-08-2015 to be sure we have the full directory in scope and not only the next file
-//Serial.println("------------File_List---Print Directory -----"); 
+Serial.println("------------File_List---Print Directory -----"); 
 while(morefiles) {
      File entry =  dir.openNextFile();
      if (entry) {
        if (entry.isDirectory()) {
- //      Serial.println("/");
+      Serial.println("/");
        printDirectory(entry, numTabs+1);
      } else {
        // files have sizes, directories do not
-//       Serial.println(entry.name());
+      Serial.println(entry.name());
        filelist[i] = entry.name();  // Store file entries in tabel
        i++;
      } // eo else
